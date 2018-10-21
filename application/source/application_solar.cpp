@@ -6,7 +6,7 @@
 #include "model_loader.hpp"
 
 #include <glbinding/gl/gl.h>
-// use gl definitions from glbinding 
+// use gl definitions from glbinding
 using namespace gl;
 
 //dont load gl bindings from glfw
@@ -22,12 +22,15 @@ using namespace gl;
 ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  :Application{resource_path}
  ,planet_object{}
+ ,m_scene{}
  ,m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}
  ,m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
 {
+  initializeScene();
   initializeGeometry();
   initializeShaderPrograms();
 }
+
 
 ApplicationSolar::~ApplicationSolar() {
   glDeleteBuffers(1, &planet_object.vertex_BO);
@@ -35,7 +38,13 @@ ApplicationSolar::~ApplicationSolar() {
   glDeleteVertexArrays(1, &planet_object.vertex_AO);
 }
 
+void ApplicationSolar::initializeScene(){
+  std::cout<<"TODO: init scene Graph!\n";
+
+}
+
 void ApplicationSolar::render() const {
+
   // bind shader to upload uniforms
   glUseProgram(m_shaders.at("planet").handle);
 
@@ -71,7 +80,7 @@ void ApplicationSolar::uploadProjection() {
 }
 
 // update uniform locations
-void ApplicationSolar::uploadUniforms() { 
+void ApplicationSolar::uploadUniforms() {
   // bind shader to which to upload unforms
   glUseProgram(m_shaders.at("planet").handle);
   // upload uniform values to new locations
@@ -94,6 +103,7 @@ void ApplicationSolar::initializeShaderPrograms() {
 
 // load models
 void ApplicationSolar::initializeGeometry() {
+  //we load model only once
   model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
 
   // generate vertex array object
@@ -126,7 +136,7 @@ void ApplicationSolar::initializeGeometry() {
 
   // store type of primitive to draw
   planet_object.draw_mode = GL_TRIANGLES;
-  // transfer number of indices to model object 
+  // transfer number of indices to model object
   planet_object.num_elements = GLsizei(planet_model.indices.size());
 }
 
