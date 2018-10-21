@@ -4,6 +4,7 @@
 #include "application.hpp"
 #include "model.hpp"
 #include "structs.hpp"
+#include "scene_graph.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -12,7 +13,6 @@ class ApplicationSolar : public Application {
   ApplicationSolar(std::string const& resource_path);
   // free allocated objects
   ~ApplicationSolar();
-
   // react to key input
   void keyCallback(int key, int action, int mods);
   //handle delta mouse movement input
@@ -24,6 +24,7 @@ class ApplicationSolar : public Application {
   void render() const;
 
  protected:
+  void initializeScene();
   void initializeShaderPrograms();
   void initializeGeometry();
   // update uniform values
@@ -35,11 +36,12 @@ class ApplicationSolar : public Application {
 
   // cpu representation of model
   model_object planet_object;
-  
+
   // camera transform matrix
   glm::fmat4 m_view_transform;
   // camera projection matrix
   glm::fmat4 m_view_projection;
+  SceneGraph m_scene;
 };
 
 #endif

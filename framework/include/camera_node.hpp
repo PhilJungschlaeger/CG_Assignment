@@ -1,7 +1,7 @@
 #ifndef CAMERANODE_HPP
 #define CAMERANODE_HPP
 
-//#include <string.h>
+#include <string>
 #include "model.hpp"
 #include "node.hpp"
 #include <glm/glm.hpp>
@@ -9,6 +9,7 @@
 class CameraNode : public Node {
 
  public:
+  CameraNode();
   bool        getPerspective();
   bool        getEnabled();
   glm::fmat4  getProjectionMatrix();

@@ -1,19 +1,19 @@
 #ifndef GEOMETRYNODE_HPP
 #define GEOMETRYNODE_HPP
 
-//#include <string.h>
+#include <string>
 #include "node.hpp"
 #include "model.hpp"
 
 class GeometryNode : public Node {
 
  public:
-  Model getGeometry();
-  void  setGeometry(Model model_in);
+  GeometryNode();
+  model& getGeometry();
+  void  setGeometry(model& model_in);
 
 private:
-  Model              m_geometry;
-
+  model              m_geometry;
 };
 
 #endif
