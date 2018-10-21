@@ -24,7 +24,7 @@ class Node {
   Node removeChildren(std::string child_name_in);
 
 private:
-  Node              m_parent;
+  Node*             m_parent;
   std::list<Node>   m_children;
   std::string       m_name;
   std::string       m_path;
