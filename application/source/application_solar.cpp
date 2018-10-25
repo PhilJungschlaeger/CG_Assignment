@@ -29,6 +29,9 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
   initializeGeometry();
   initializeShaderPrograms();
   initializeScene();
+  renderObjects();
+
+
 }
 
 ApplicationSolar::~ApplicationSolar() {
@@ -38,6 +41,7 @@ ApplicationSolar::~ApplicationSolar() {
 }
 
 void ApplicationSolar::render() const {
+
   // bind shader to upload uniforms
   glUseProgram(m_shaders.at("planet").handle);
 
@@ -96,7 +100,7 @@ void ApplicationSolar::initializeShaderPrograms() {
 
 // load models
 void ApplicationSolar::initializeGeometry() {
-  model planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
+  planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
 
   // generate vertex array object
   glGenVertexArrays(1, &planet_object.vertex_AO);
@@ -159,10 +163,27 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 }
 
 void ApplicationSolar::initializeScene() {
-  Node rootNode = Node();
-  m_scene = SceneGraph("solarsystem", &rootNode);
+  //init root Node
+  Node rootNode     =     Node();
+  //init scene Graph
+  m_scene           =     SceneGraph("solarsystem", &rootNode);
+  GeometryNode sun  =     GeometryNode();
+  
+  rootNode.addChildren(&sun);
+  //create 8 planets and add as child to sun
+  for(int i = 0; i < 8; i++){
+    GeometryNode planet = GeometryNode();
+    planet.setGeometry(planet_model);
+    sun.addChildren(&planet);
+  }
 }
 
+void ApplicationSolar::renderObjects() {
+  for(unsigned int i = 0; i < m_scene.getRoot()->getChildren("sun")->getChildrenList().size();i++){
+    std::cout<<m_scene.getRoot()->getChildren("sun")->getChildrenList().size()<<"\n";
+    std::cout<<i<<"\n";
+  }
+}
 
 // exe entry point
 int main(int argc, char* argv[]) {

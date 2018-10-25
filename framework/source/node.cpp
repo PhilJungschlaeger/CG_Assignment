@@ -63,8 +63,10 @@ void Node::setWorldTransform(glm::fmat4 mat_in)
 void Node::addChildren(Node* child_in){
   m_children.push_back(child_in);
 }
+
 Node* Node::removeChildren(std::string child_name_in){
   std::cout<<"Not Yt Implemented!}\n";
-  Node* nnode= new Node();
-  return nnode;
+  Node* tmp = getChildren(child_name_in);
+  getChildrenList().remove(getChildren(child_name_in));
+  return tmp;
 }
