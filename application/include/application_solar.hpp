@@ -34,6 +34,7 @@ class ApplicationSolar : public Application {
   // upload view matrix
   void uploadView();
 
+
   // cpu representation of model
   model_object planet_object;
 
