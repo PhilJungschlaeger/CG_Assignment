@@ -24,6 +24,8 @@ class ApplicationSolar : public Application {
 
   // draw all objects
   void render() const;
+  void renderObjects() const;
+
 
  protected:
   void initializeScene();
@@ -35,7 +37,6 @@ class ApplicationSolar : public Application {
   void uploadProjection();
   // upload view matrix
   void uploadView();
-  void renderObjects();
   
   // cpu representation of model
   model_object planet_object;

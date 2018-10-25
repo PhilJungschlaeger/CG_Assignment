@@ -4,8 +4,8 @@
 
 Node::Node():
 m_parent{},
-m_children{},
-m_name{},
+m_children{ std::list<Node*>() },
+m_name{std::string("nonameset")},
 m_path{},
 m_depth{0},
 m_localTransform{},
@@ -13,6 +13,19 @@ m_worldTransform{}
 {
   std::cout<<"created Node\n";
 }
+
+Node::Node(std::string name):
+m_parent{},
+m_children{std::list<Node*>()},
+m_name{name},
+m_path{},
+m_depth{0},
+m_localTransform{},
+m_worldTransform{}
+{
+  std::cout<<"created Node\n";
+}
+
 
 Node*            Node::getParent(){
   return m_parent;
@@ -39,7 +52,7 @@ std::list<Node*>& Node::getChildrenList()
   return m_children;
 }
 
-std::string     Node::getName() const{
+std::string     Node::getName(){
   return m_name;
 }
 
@@ -71,7 +84,6 @@ void Node::addChildren(Node* child_in){
 }
 
 Node* Node::removeChildren(std::string child_name_in){
-  std::cout<<"Not Yt Implemented!}\n";
   Node* tmp = getChildren(child_name_in);
   getChildrenList().remove(getChildren(child_name_in));
   return tmp;

@@ -20,7 +20,7 @@ std::string   SceneGraph::getName()const{
   return m_name;
 }
 
-Node*          SceneGraph::getRoot(){
+Node*          SceneGraph::getRoot()const{
   return m_root;
 }
 

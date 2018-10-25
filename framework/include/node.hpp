@@ -9,11 +9,12 @@
 class Node {
  public:
   Node();
+  Node(std::string name);
   Node*             getParent();
   void              setParent(Node* node_in);
   Node*             getChildren(std::string child_name_in);
   std::list<Node*>& getChildrenList();
-  std::string       getName() const;
+  std::string       getName() ;
   std::string       getPath() const;
   int               getDepth() const;
   glm::fmat4&       getLocalTransform();

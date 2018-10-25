@@ -9,6 +9,12 @@ m_geometry{}
 {
   std::cout<<"created GeometryNode\n";
 }
+GeometryNode::GeometryNode(std::string name):
+Node{name},
+m_geometry{}
+{
+  std::cout<<"created GeometryNode\n";
+}
 
 
 model& GeometryNode::getGeometry(){

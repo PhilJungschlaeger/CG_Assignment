@@ -29,9 +29,6 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
   initializeGeometry();
   initializeShaderPrograms();
   initializeScene();
-  renderObjects();
-
-
 }
 
 ApplicationSolar::~ApplicationSolar() {
@@ -40,26 +37,8 @@ ApplicationSolar::~ApplicationSolar() {
   glDeleteVertexArrays(1, &planet_object.vertex_AO);
 }
 
-void ApplicationSolar::render() const {
-
-  // bind shader to upload uniforms
-  glUseProgram(m_shaders.at("planet").handle);
-
-  glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
-  model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f, 0.0f, -1.0f});
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"),
-                     1, GL_FALSE, glm::value_ptr(model_matrix));
-
-  // extra matrix for normal transformation to keep them orthogonal to surface
-  glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
-  glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"),
-                     1, GL_FALSE, glm::value_ptr(normal_matrix));
-
-  // bind the VAO to draw
-  glBindVertexArray(planet_object.vertex_AO);
-
-  // draw bound vertex array using bound shader
-  glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+void ApplicationSolar::render() const{
+  renderObjects();
 }
 
 void ApplicationSolar::uploadView() {
@@ -198,24 +177,45 @@ void ApplicationSolar::resizeCallback(unsigned width, unsigned height) {
 
 void ApplicationSolar::initializeScene() {
   //init root Node
-  Node rootNode     =     Node();
+  Node* rootNode     =     new Node("root");
   //init scene Graph
-  m_scene           =     SceneGraph("solarsystem", &rootNode);
-  GeometryNode sun  =     GeometryNode();
+  m_scene           =     SceneGraph("solarsystem", rootNode);
+  GeometryNode* sun  =     new GeometryNode("sun");
   
-  rootNode.addChildren(&sun);
+  
+  rootNode->addChildren(sun);
   //create 8 planets and add as child to sun
   for(int i = 0; i < 8; i++){
-    GeometryNode planet = GeometryNode();
-    planet.setGeometry(planet_model);
-    sun.addChildren(&planet);
+    GeometryNode* planet = new GeometryNode("test");
+    planet->setGeometry(planet_model);
+    sun->addChildren(planet);
   }
 }
 
-void ApplicationSolar::renderObjects() {
-  for(unsigned int i = 0; i < m_scene.getRoot()->getChildren("sun")->getChildrenList().size();i++){
-    std::cout<<m_scene.getRoot()->getChildren("sun")->getChildrenList().size()<<"\n";
-    std::cout<<i<<"\n";
+void ApplicationSolar::renderObjects() const{
+  
+  // bind shader to upload uniforms
+  glUseProgram(m_shaders.at("planet").handle);
+
+  for(unsigned int i = 0; i < m_scene.getRoot()->getChildren("sun")->getChildrenList().size(); i++){
+    
+    glm::fmat4 model_matrix = glm::rotate(glm::fmat4{}, float(glfwGetTime()/2*i/2), glm::fvec3{0.0f, 1.0f, 0.0f});
+    model_matrix = glm::translate(model_matrix, glm::fvec3{0.0f, 0.0f, -1.0f * i * 8});
+    model_matrix = glm::rotate(model_matrix, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
+    glm::fvec3 scale {(9-i)/3, (9-i)/3, (9-i)/3};
+    model_matrix = glm::scale(model_matrix, scale);
+
+    glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
+
+    // extra matrix for normal transformation to keep them orthogonal to surface
+    glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
+    glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(normal_matrix));
+
+    // bind the VAO to draw
+    glBindVertexArray(planet_object.vertex_AO);
+
+    // draw bound vertex array using bound shader
+    glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
   }
 }
 

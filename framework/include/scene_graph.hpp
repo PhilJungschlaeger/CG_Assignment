@@ -12,7 +12,7 @@ class SceneGraph {
   SceneGraph();
   SceneGraph(std::string name_in, Node* root_in);
   std::string   getName() const;
-  Node*         getRoot();
+  Node*         getRoot() const;
 //std::string printGraph();
 
 private:
