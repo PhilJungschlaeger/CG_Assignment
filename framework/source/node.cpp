@@ -23,7 +23,13 @@ void            Node::setParent(Node* node_in){
 }
 
 Node*            Node::getChildren(std::string child_name_in){
-  std::cout<<"Not Yt Implemented!}\n";
+  for (auto i : m_children) {
+    if(i->getName()==child_name_in)
+    {
+      return i;
+    }
+  }
+  std::cout<<"ERROR: Could not find Child Node named: "<<child_name_in<<"\n";
   Node* nnode= new Node();
   return nnode;
 }
