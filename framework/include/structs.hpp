@@ -3,7 +3,7 @@
 
 #include <map>
 #include <glbinding/gl/gl.h>
-// use gl definitions from glbinding 
+// use gl definitions from glbinding
 using namespace gl;
 
 // gpu representation of model
