@@ -26,11 +26,12 @@ class ApplicationSolar : public Application {
   void render() const;
   void renderObjects() const;
   void renderStars() const;
-
+  void renderOrbits() const;
 
 
  protected:
   void initializeTheStars();
+  void initializeTheOrbits();
   void initializeScene();
   void initializeShaderPrograms();
   void initializeGeometry();
@@ -44,6 +45,7 @@ class ApplicationSolar : public Application {
   // cpu representation of model
   model_object planet_object;
   model_object star_object;
+  model_object orbit_object;
 
   // camera transform matrix
   glm::fmat4 m_view_transform;
@@ -52,9 +54,12 @@ class ApplicationSolar : public Application {
   SceneGraph m_scene;
   model planet_model;
   model star_model;
+  model orbit_model;
 
 
   std::vector<float> m_stars;
+  std::vector<float> m_orbits;
+
 };
 
 #endif
