@@ -125,11 +125,11 @@ void ApplicationSolar::initializeTheOrbits() {
   float ref_radius = 1.0f * 8;
   int orbit_iterations = 10;
 
-  
+
   for( int i = 1; i <number_of_orbits; i++){
     float radius = ref_radius *i;
     for (int it = 0; it < orbit_iterations; it++){
-      
+
       float x = radius* cos(2.0*PI* ((float)  (it-1)/((float) orbit_iterations)));
       float z = radius* sin(2.0*PI* ((float)  (it-1)/((float) orbit_iterations)));
       float y = 0;
@@ -145,7 +145,7 @@ void ApplicationSolar::initializeTheOrbits() {
        m_orbits.push_back(z);
     }
   }
-  
+
 
   /*
   float posMin = -10;
@@ -163,8 +163,8 @@ void ApplicationSolar::initializeTheOrbits() {
 
 void ApplicationSolar::initializeShaderPrograms() {
   // store shader program objects in container
-  m_shaders.emplace("planet", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/simple.vert"},
-                                           {GL_FRAGMENT_SHADER, m_resource_path + "shaders/simple.frag"}}});
+  m_shaders.emplace("planet", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/planet.vert"},
+                                           {GL_FRAGMENT_SHADER, m_resource_path + "shaders/planet.frag"}}});
   // store shader program objects in container
 
   m_shaders.emplace("stars", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/stars.vert"},
@@ -178,6 +178,7 @@ void ApplicationSolar::initializeShaderPrograms() {
   m_shaders.at("planet").u_locs["ModelMatrix"] = -1;
   m_shaders.at("planet").u_locs["ViewMatrix"] = -1;
   m_shaders.at("planet").u_locs["ProjectionMatrix"] = -1;
+  m_shaders.at("planet").u_locs["Planet_Color"]=-1;
 
   m_shaders.at("stars").u_locs["ViewMatrix"] = -1;
   m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
@@ -389,9 +390,9 @@ void ApplicationSolar::renderObjects() const{
     model_matrix = glm::rotate(model_matrix, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
     glm::fvec3 scale {(9-i)/3, (9-i)/3, (9-i)/3};
     model_matrix = glm::scale(model_matrix, scale);
-
+    glm::fvec3 planet_color= {0.0,1.0*i/m_scene.getRoot()->getChildren("sun")->getChildrenList().size(),(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-i)/m_scene.getRoot()->getChildren("sun")->getChildrenList().size()};
     glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-
+    glUniform3f(m_shaders.at("planet").u_locs.at("Planet_Color"), planet_color.x, planet_color.y, planet_color.z);
     // extra matrix for normal transformation to keep them orthogonal to surface
     glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
     glUniformMatrix4fv(m_shaders.at("planet").u_locs.at("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(normal_matrix));
