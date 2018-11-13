@@ -59,7 +59,7 @@ class ApplicationSolar : public Application {
 
   std::vector<float> m_stars;
   std::vector<float> m_orbits;
-
+  std::string m_shader_name;
 };
 
 #endif
