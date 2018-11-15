@@ -30,7 +30,7 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  ,planet_object{}
  ,m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}
  ,m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
- ,m_shader_name{"planet_mode_2"}
+ ,m_shader_name{"planet_mode_1"}
 {
   initializeTheStars();
   initializeTheOrbits();
@@ -415,7 +415,14 @@ void ApplicationSolar::renderObjects() const{
     model_matrix = glm::rotate(model_matrix, float(glfwGetTime()), glm::fvec3{0.0f, 1.0f, 0.0f});
     glm::fvec3 scale {(9-i)/3, (9-i)/3, (9-i)/3};
     model_matrix = glm::scale(model_matrix, scale);
-    glm::fvec3 planet_color= {0.0,1.0*i/m_scene.getRoot()->getChildren("sun")->getChildrenList().size(),(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-i)/m_scene.getRoot()->getChildren("sun")->getChildrenList().size()};
+    glm::fvec3 planet_color;
+    if(i==0){
+      planet_color= {0.1,1.0,0.0};
+    }else{
+      //glm::fvec3 planet_color= {0.2,1.0*i/(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1),(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1-i)/(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1)};
+      planet_color= {0.2,1.0,1.0};
+    }
+
     glUniformMatrix4fv(m_shaders.at(m_shader_name).u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
     glUniform3f(m_shaders.at(m_shader_name).u_locs.at("Planet_Color"), planet_color.x, planet_color.y, planet_color.z);
     // extra matrix for normal transformation to keep them orthogonal to surface
