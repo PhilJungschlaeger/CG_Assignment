@@ -1,6 +1,7 @@
 #include "application_solar.hpp"
 #include "window_handler.hpp"
 #include "camera_node.hpp"
+#include "point_light.hpp"
 
 #include "utils.hpp"
 #include "shader_loader.hpp"
@@ -399,7 +400,7 @@ void ApplicationSolar::initializeScene() {
   stars->setGeometry(star_model);
   GeometryNode* orbits  =     new GeometryNode("orbits");
   orbits->setGeometry(orbit_model);
-
+  LightNode* light = new LightNode(50, glm::vec3{1.0, 1.0, 1.0});
 }
 
 void ApplicationSolar::renderObjects() const{
