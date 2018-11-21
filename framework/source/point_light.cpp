@@ -1,4 +1,4 @@
-#include "geometry_node.hpp"
+#include "point_light.hpp"
 #include <iostream>
 
 //#include "model.hpp"
