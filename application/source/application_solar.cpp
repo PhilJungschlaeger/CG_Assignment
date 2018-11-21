@@ -428,7 +428,6 @@ void ApplicationSolar::renderObjects() const{
     // extra matrix for normal transformation to keep them orthogonal to surface
     glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
     glUniformMatrix4fv(m_shaders.at(m_shader_name).u_locs.at("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(normal_matrix));
-
     // bind the VAO to draw
     glBindVertexArray(planet_object.vertex_AO);
 
