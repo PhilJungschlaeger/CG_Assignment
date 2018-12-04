@@ -38,6 +38,8 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
   initializeGeometry();
   initializeShaderPrograms();
   initializeScene();
+  loadTextures();
+  initzializeTextures();
 }
 
 ApplicationSolar::~ApplicationSolar() {
@@ -165,10 +167,10 @@ void ApplicationSolar::initializeTheOrbits() {
 
 void ApplicationSolar::initializeShaderPrograms() {
   // store shader program objects in container
-    m_shaders.emplace("planet_mode_1", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/planet.vert"},
+    m_shaders.emplace("planet_mode_1", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/planet_basic_light.vert"},
                                              {GL_FRAGMENT_SHADER, m_resource_path + "shaders/planet_basic_light.frag"}}});
 
-    m_shaders.emplace("planet_mode_2", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/planet.vert"},
+    m_shaders.emplace("planet_mode_2", shader_program{{{GL_VERTEX_SHADER,m_resource_path + "shaders/planet_cell_shading.vert"},
                                              {GL_FRAGMENT_SHADER, m_resource_path + "shaders/planet_cell_shading.frag"}}});
 
   // store shader program objects in container
@@ -184,15 +186,13 @@ void ApplicationSolar::initializeShaderPrograms() {
   m_shaders.at("planet_mode_1").u_locs["ModelMatrix"] = -1;
   m_shaders.at("planet_mode_1").u_locs["ViewMatrix"] = -1;
   m_shaders.at("planet_mode_1").u_locs["ProjectionMatrix"] = -1;
-  m_shaders.at("planet_mode_1").u_locs["Planet_Color"]=-1;
   m_shaders.at("planet_mode_1").u_locs["YourTexture"] = -1;
 
   m_shaders.at("planet_mode_2").u_locs["NormalMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["ModelMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["ViewMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["ProjectionMatrix"] = -1;
-  m_shaders.at("planet_mode_2").u_locs["Planet_Color"]=-1;
-  m_shaders.at("planet_mode_2").u_locs["YourTexture"] = -1;
+  m_shaders.at("planet_mode_2").u_locs["Planet_Color"]= -1;
 
   m_shaders.at("stars").u_locs["ViewMatrix"] = -1;
   m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
@@ -422,15 +422,12 @@ void ApplicationSolar::renderObjects() const{
     glm::fvec3 scale {(9-i)/3, (9-i)/3, (9-i)/3};
     model_matrix = glm::scale(model_matrix, scale);
     glm::fvec3 planet_color {1-i/(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1),0.2,i/(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1)};
-    /*if(i==0){
-      planet_color = {0.1,1.0,0.0};
-    }else{
-      planet_color = {1-i/(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1),0.2,i/(m_scene.getRoot()->getChildren("sun")->getChildrenList().size()-1)};
-      //planet_color= {0.2,1.0,1.0};
-    }
-  */
+    if("planet_mode_2"==m_shader_name)
+      glUniform3f(m_shaders.at("planet_mode_2").u_locs.at("Planet_Color"), planet_color.x, planet_color.y, planet_color.z);
+
+
     glUniformMatrix4fv(m_shaders.at(m_shader_name).u_locs.at("ModelMatrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
-    glUniform3f(m_shaders.at(m_shader_name).u_locs.at("Planet_Color"), planet_color.x, planet_color.y, planet_color.z);
+
     // extra matrix for normal transformation to keep them orthogonal to surface
     glm::fmat4 normal_matrix = glm::inverseTranspose(glm::inverse(m_view_transform) * model_matrix);
     glUniformMatrix4fv(m_shaders.at(m_shader_name).u_locs.at("NormalMatrix"), 1, GL_FALSE, glm::value_ptr(normal_matrix));
@@ -440,10 +437,13 @@ void ApplicationSolar::renderObjects() const{
     // draw bound vertex array using bound shader
     glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
 
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, tex_objects[0].handle);
-    //int sampler_location = glGetUniformLocation(m_shaders.at(m_shader_name).u_locs.at("YourTexture"),"YourTexture");
-    glUniform1i(m_shaders.at(m_shader_name).u_locs.at("YourTexture"), 0);
+    if("planet_mode_1"==m_shader_name)
+    {
+      glActiveTexture(GL_TEXTURE0);
+      glBindTexture(GL_TEXTURE_2D, tex_objects[0].handle);
+      glUniform1i(m_shaders.at("planet_mode_1").u_locs.at("YourTexture"), 0);
+    }
+
   }
 }
 
@@ -465,7 +465,7 @@ void ApplicationSolar::renderOrbits() const{
 
 void ApplicationSolar::loadTextures(){
   // load textures, datatype textures defined in struct, consists of name and pixel_data
-  texture basic   ("YourTexture", texture_loader::file(m_resource_path + "textures/sushi.png"));
+  texture basic   ("basic", texture_loader::file(m_resource_path + "textures/sushi.png"));
   texture_container.push_back(basic);
 }
 
@@ -479,7 +479,7 @@ void ApplicationSolar::initzializeTextures(){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexImage2D(GL_TEXTURE_2D, 0, texture_container[0].m_pixelData.channels, texture_container[0].m_pixelData.width, texture_container[0].m_pixelData.height, 0, texture_container[0].m_pixelData.channels, texture_container[0].m_pixelData.channel_type, texture_container[0].m_pixelData.ptr());
-    
+
     tex_objects.push_back(tex);
   }
 }

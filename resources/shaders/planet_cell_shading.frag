@@ -5,13 +5,8 @@ in  vec3 pass_Color;
 in  vec3 pass_vert_pos;
 in  vec3 pass_vert_pos_world;
 
-///probably useless::>
-in vec2 pass_TexCoord;
-
-uniform Sampler2D YourTexture;
-//<::
-out vec4 out_Color;
 #define PI 3.1415
+out vec4 out_Color;
 
 void main() {
 
