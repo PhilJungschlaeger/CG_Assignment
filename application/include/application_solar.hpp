@@ -58,6 +58,7 @@ class ApplicationSolar : public Application {
   model planet_model;
   model star_model;
   model orbit_model;
+  model skybox_model;
 
 
   std::vector<float> m_stars;
