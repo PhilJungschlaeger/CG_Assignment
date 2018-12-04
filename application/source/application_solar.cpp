@@ -442,8 +442,8 @@ void ApplicationSolar::renderObjects() const{
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, tex_objects[0].handle);
-    int sampler_location = glGetUniformLocation(m_shaders.at(m_shader_name).u_locs.at("ColorTex"),"YourTexture");
-    glUniform1i(sampler_location, 0);
+    //int sampler_location = glGetUniformLocation(m_shaders.at(m_shader_name).u_locs.at("YourTexture"),"YourTexture");
+    glUniform1i(m_shaders.at(m_shader_name).u_locs.at("YourTexture"), 0);
   }
 }
 
@@ -465,7 +465,7 @@ void ApplicationSolar::renderOrbits() const{
 
 void ApplicationSolar::loadTextures(){
   // load textures, datatype textures defined in struct, consists of name and pixel_data
-  texture basic   ("basic", texture_loader::file(m_resource_path + "textures/sushi.png"));
+  texture basic   ("YourTexture", texture_loader::file(m_resource_path + "textures/sushi.png"));
   texture_container.push_back(basic);
 }
 
