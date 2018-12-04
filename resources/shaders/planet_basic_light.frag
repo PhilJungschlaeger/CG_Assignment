@@ -4,10 +4,12 @@ in  vec3 pass_Normal;
 in  vec3 pass_Color;
 in  vec3 pass_vert_pos;
 in  vec3 pass_vert_pos_world;
+in vec2 pass_TexCoord;            
 
-out vec4 out_Color;
+uniform Sampler2D YourTexture;
+
 #define PI 3.1415
-
+out vec4 out_Color;
 void main() {
 
   //we need:
@@ -18,14 +20,14 @@ void main() {
   vec3 frag_normal= normalize(pass_Normal);
   //material:
   vec3 specular_color = vec3(1.0,0.0,0.0);
-  vec3 diffuse_color  = pass_Color;
+  vec3 diffuse_color = texture * (YourTexture, pass_TexCoord);
   float shininess=30.0;
 
   //light source:
   vec3 light_pos =vec3(0,0,0);
   float light_intensity=0.1;
   vec3 light_color= vec3(1.0,1.0,1.0);// * ModelMatrix;
-  vec3 ambient_color= vec3(0.1,0.1,0.1);
+  vec3 ambient_color=0.1* diffuse_color;
 
   //derived
   vec3 light_ray_in= normalize(light_pos-frag_pos);

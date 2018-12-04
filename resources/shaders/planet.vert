@@ -3,6 +3,7 @@
 // vertex attributes of VAO
 layout(location = 0) in vec3 in_Position;
 layout(location = 1) in vec3 in_Normal;
+layout(location = 2) in vec2 in_TexCoord;
 
 
 //Matrix Uniforms as specified with glUniformMatrix4fv
@@ -17,10 +18,12 @@ out vec3 pass_Normal;
 out vec3 pass_Color;
 out vec3 pass_vert_pos;
 out vec3 pass_vert_pos_world;
+out vec2 pass_TexCoord;
 
 //we tried to follow wikipedia: https://en.wikipedia.org/wiki/Blinn–Phong_shading_model
 void main(void)
 {
+	pass_TexCoord=in_TexCoord;
 	gl_Position = (ProjectionMatrix * ViewMatrix * ModelMatrix) * vec4(in_Position, 1.0);
 
 	vec4 vertPos4 =   ModelMatrix *  vec4(in_Position, 1.0); //modelview= view*model?
