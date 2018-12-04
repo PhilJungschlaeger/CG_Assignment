@@ -7,6 +7,7 @@
 #include "scene_graph.hpp"
 #include "node.hpp"
 #include "geometry_node.hpp"
+#include "texture_loader.hpp"
 
 // gpu representation of model
 class ApplicationSolar : public Application {
@@ -35,6 +36,8 @@ class ApplicationSolar : public Application {
   void initializeScene();
   void initializeShaderPrograms();
   void initializeGeometry();
+  void initzializeTextures();
+  void loadTextures();
   // update uniform values
   void uploadUniforms();
   // upload projection matrix
@@ -60,6 +63,8 @@ class ApplicationSolar : public Application {
   std::vector<float> m_stars;
   std::vector<float> m_orbits;
   std::string m_shader_name;
+  std::vector<texture> texture_container;
+  std::vector<texture_object> tex_objects;
 };
 
 #endif

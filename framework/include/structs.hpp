@@ -3,6 +3,7 @@
 
 #include <map>
 #include <glbinding/gl/gl.h>
+#include <pixel_data.hpp>
 // use gl definitions from glbinding
 using namespace gl;
 
@@ -18,6 +19,16 @@ struct model_object {
   GLenum draw_mode = GL_NONE;
   // indices number, if EBO exists
   GLsizei num_elements = 0;
+};
+
+struct texture{
+  texture(std::string name, pixel_data pixelData)
+    :m_name{name}
+    ,m_pixelData{pixelData}
+    {}
+
+    std::string m_name;
+    pixel_data m_pixelData;
 };
 
 // gpu representation of texture

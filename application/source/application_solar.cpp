@@ -434,6 +434,11 @@ void ApplicationSolar::renderObjects() const{
 
     // draw bound vertex array using bound shader
     glDrawElements(planet_object.draw_mode, planet_object.num_elements, model::INDEX.type, NULL);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, tex_objects[0].handle);
+    int sampler_location = glGetUniformLocation(m_shaders.at(m_shader_name).u_locs.at("ColorTex"),"YourTexture");
+    glUniform1i(sampler_location, 0);
   }
 }
 
@@ -451,6 +456,27 @@ void ApplicationSolar::renderOrbits() const{
   glBindVertexArray(orbit_object.vertex_AO);
   glLineWidth(10.0);  //fat and retro
   glDrawArrays(orbit_object.draw_mode, 0, (int)m_orbits.size());
+}
+
+void ApplicationSolar::loadTextures(){
+  // load textures, datatype textures defined in struct, consists of name and pixel_data
+  texture basic   ("basic", texture_loader::file(m_resource_path + "textures/sushi.png"));
+  texture_container.push_back(basic);
+}
+
+void ApplicationSolar::initzializeTextures(){
+  //inizia
+  for(int i = 0; i < 9; i++){
+    texture_object tex;
+    glActiveTexture(GL_TEXTURE0);
+    glGenTextures(1, &tex.handle);
+    glBindTexture(GL_TEXTURE_2D, tex.handle);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, texture_container[0].m_pixelData.channels, texture_container[0].m_pixelData.width, texture_container[0].m_pixelData.height, 0, texture_container[0].m_pixelData.channels, texture_container[0].m_pixelData.channel_type, texture_container[0].m_pixelData.ptr());
+    
+    tex_objects.push_back(tex);
+  }
 }
 
 // exe entry point
