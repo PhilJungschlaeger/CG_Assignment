@@ -28,9 +28,12 @@ class ApplicationSolar : public Application {
   void renderObjects() const;
   void renderStars() const;
   void renderOrbits() const;
+  void renderSkyBox() const;
 
 
  protected:
+  void initializeSkyBox();
+
   void initializeTheStars();
   void initializeTheOrbits();
   void initializeScene();
@@ -49,6 +52,7 @@ class ApplicationSolar : public Application {
   model_object planet_object;
   model_object star_object;
   model_object orbit_object;
+  model_object skybox_object;
 
   // camera transform matrix
   glm::fmat4 m_view_transform;
@@ -66,6 +70,8 @@ class ApplicationSolar : public Application {
   std::string m_shader_name;
   std::vector<texture> texture_container;
   std::vector<texture_object> tex_objects;
+  texture_object skybox;
+  std::vector<texture> skybox_textures;
 };
 
 #endif
