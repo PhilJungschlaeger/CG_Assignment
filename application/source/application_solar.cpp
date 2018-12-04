@@ -185,13 +185,14 @@ void ApplicationSolar::initializeShaderPrograms() {
   m_shaders.at("planet_mode_1").u_locs["ViewMatrix"] = -1;
   m_shaders.at("planet_mode_1").u_locs["ProjectionMatrix"] = -1;
   m_shaders.at("planet_mode_1").u_locs["Planet_Color"]=-1;
+  m_shaders.at("planet_mode_1").u_locs["YourTexture"] = -1;
 
   m_shaders.at("planet_mode_2").u_locs["NormalMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["ModelMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["ViewMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["ProjectionMatrix"] = -1;
   m_shaders.at("planet_mode_2").u_locs["Planet_Color"]=-1;
-
+  m_shaders.at("planet_mode_2").u_locs["YourTexture"] = -1;
 
   m_shaders.at("stars").u_locs["ViewMatrix"] = -1;
   m_shaders.at("stars").u_locs["ProjectionMatrix"] = -1;
@@ -203,7 +204,7 @@ void ApplicationSolar::initializeShaderPrograms() {
 // load models
 void ApplicationSolar::initializeGeometry() {
   std::cout << "resouce: "<< m_resource_path << "\n";
-  planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL);
+  planet_model = model_loader::obj(m_resource_path + "models/sphere.obj", model::NORMAL| model::TEXCOORD);
   star_model = model{m_stars, (model::POSITION + model::NORMAL), {0}};
   orbit_model = model{m_orbits, (model::POSITION), {0}};
 
@@ -227,6 +228,10 @@ void ApplicationSolar::initializeGeometry() {
   glEnableVertexAttribArray(1);
   // second attribute is 3 floats with no offset & stride
   glVertexAttribPointer(1, model::NORMAL.components, model::NORMAL.type, GL_FALSE, planet_model.vertex_bytes, planet_model.offsets[model::NORMAL]);
+
+  glEnableVertexAttribArray(2);
+  // second attribute is 3 floats with no offset & stride
+  glVertexAttribPointer(2, model::TEXCOORD.components, model::TEXCOORD.type, GL_FALSE, planet_model.vertex_bytes, planet_model.offsets[model::TEXCOORD]);
 
    // generate generic buffer
   glGenBuffers(1, &planet_object.element_BO);
