@@ -120,7 +120,7 @@ void ApplicationSolar::initializeSkyBox(){
   for(unsigned int idx = 0; idx < skybox_textures.size(); ++idx){
     glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + idx, 0, skybox_textures[idx].m_pixelData.channels, (GLsizei)skybox_textures[idx].m_pixelData.width,
                 (GLsizei)skybox_textures[idx].m_pixelData.height, 0, skybox_textures[idx].m_pixelData.channels,
-                skybox_textures[idx].m_pixelData.channel_type, skybox_textures[idx].m_pixelData.ptr());
+                 skybox_textures[idx].m_pixelData.channel_type, skybox_textures[idx].m_pixelData.ptr());
   }
 
   glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0);
@@ -179,20 +179,6 @@ void ApplicationSolar::initializeTheOrbits() {
        m_orbits.push_back(z);
     }
   }
-
-
-  /*
-  float posMin = -10;
-  float posMax = 10;
-
-  for( int i = 0; i < number_of_orbits*orbit_iterations; i++){
-
-      for (int pos = 0; pos < 3; pos++){
-        float new_coordinat = posMin + rand() * ( posMax - posMin ) / RAND_MAX;
-        m_orbits.push_back(new_coordinat );
-      }
-  }
-  */
 }
 
 void ApplicationSolar::initializeShaderPrograms() {
