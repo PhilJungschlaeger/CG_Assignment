@@ -29,6 +29,7 @@ class ApplicationSolar : public Application {
   void renderStars() const;
   void renderOrbits() const;
   void renderSkyBox() const;
+  void renderFrameBuffer() const;
 
 
  protected:
@@ -40,6 +41,8 @@ class ApplicationSolar : public Application {
   void initializeShaderPrograms();
   void initializeGeometry();
   void initzializeTextures();
+  void initializeFrameBuffer();
+
   void loadTextures();
   // update uniform values
   void uploadUniforms();

@@ -41,7 +41,7 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
   loadTextures();
   initzializeTextures();
   initializeSkyBox();
-
+  initializeFrameBuffer();
 }
 
 ApplicationSolar::~ApplicationSolar() {
@@ -55,6 +55,7 @@ void ApplicationSolar::render() const{
   renderStars();
   renderOrbits();
   renderObjects();
+  renderFrameBuffer();
 }
 
 void ApplicationSolar::uploadView() {
@@ -107,6 +108,9 @@ void ApplicationSolar::uploadUniforms() {
 
 ///////////////////////////// intialisation functions /////////////////////////
 // load shader sources
+void ApplicationSolar::initializeFrameBuffer(){
+  std::cout<<"ApplicationSolar::initializeFrameBuffer(): not yet implemented\n";
+}
 void ApplicationSolar::initializeSkyBox(){
   glActiveTexture(GL_TEXTURE0);
   glGenTextures(1, &skybox.handle);
@@ -461,6 +465,9 @@ void ApplicationSolar::initializeScene() {
   GeometryNode* orbits  =     new GeometryNode("orbits");
   orbits->setGeometry(orbit_model);
   LightNode* light = new LightNode(50, glm::vec3{1.0, 1.0, 1.0});
+}
+void ApplicationSolar::renderFrameBuffer() const {
+  std::cout<<"ApplicationSolar::renderFrameBuffer(): not yet implemented\n";
 }
 
 void ApplicationSolar::renderSkyBox() const {
