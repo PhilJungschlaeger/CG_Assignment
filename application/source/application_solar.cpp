@@ -31,7 +31,8 @@ ApplicationSolar::ApplicationSolar(std::string const& resource_path)
  ,planet_object{}
  ,m_view_transform{glm::translate(glm::fmat4{}, glm::fvec3{0.0f, 0.0f, 4.0f})}
  ,m_view_projection{utils::calculate_projection_matrix(initial_aspect_ratio)}
- ,m_shader_name{"planet_mode_1"}
+ ,m_shader_name{"planet_mode_1"},
+ m_effect_mode{glm::vec4(0,0,0,0)}
 {
   initializeTheStars();
   initializeTheOrbits();
@@ -260,6 +261,7 @@ void ApplicationSolar::initializeShaderPrograms() {
   m_shaders.at("skybox").u_locs["ViewMatrix"]=-1;
 
   m_shaders.at("quad").u_locs["YourTexture"]=-1;
+  m_shaders.at("quad").u_locs["Effect_Mode"]=-1;
 
 }
 
@@ -496,7 +498,20 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
     m_shader_name = "planet_mode_2";
     uploadView();
     uploadProjection();
+  }else if(key == GLFW_KEY_7  && (action == GLFW_PRESS )){
+    std::cout<<"Effect Mode: "<<7<<" [Gay]\n";
+    m_effect_mode.x = ((int)m_effect_mode.x + 1) % 2;
+  }else if(key == GLFW_KEY_8  && (action == GLFW_PRESS )){
+    std::cout<<"Effect Mode: "<<8<<" [Mir-X]\n";
+    m_effect_mode.y= ((int)m_effect_mode.y + 1) % 2;
+  }else if(key == GLFW_KEY_9  && (action == GLFW_PRESS )){
+    std::cout<<"Effect Mode: "<<9<<" [Mir-Y]\n";
+    m_effect_mode.z=((int)m_effect_mode.z + 1) % 2;
+  }else if(key == GLFW_KEY_0  && (action == GLFW_PRESS )){
+    std::cout<<"Effect Mode: "<<0<<" [Gauß]\n";
+    m_effect_mode.w=((int)m_effect_mode.w + 1) % 2;
   }
+
 }
 
 //handle delta mouse movement input
@@ -548,6 +563,7 @@ void ApplicationSolar::renderFrameBuffer()  const{
   glBindTexture(GL_TEXTURE_2D, frame_buffer_tex_obj.handle);
   glUniform1i(m_shaders.at("quad").u_locs.at("YourTexture"), 0);
   glBindVertexArray(quad_object.vertex_AO);
+  glUniform4f(m_shaders.at("quad").u_locs.at("Effect_Mode"), m_effect_mode.x, m_effect_mode.y, m_effect_mode.z, m_effect_mode.w);
   glDrawArrays(quad_object.draw_mode, 0, quad_object.num_elements);
 
 }

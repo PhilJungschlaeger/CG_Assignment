@@ -69,7 +69,7 @@ class ApplicationSolar : public Application {
   model skybox_model;
   model quad_model;
 
-
+  glm::vec4 m_effect_mode;
   std::vector<float> m_stars;
   std::vector<float> m_orbits;
   std::string m_shader_name;
