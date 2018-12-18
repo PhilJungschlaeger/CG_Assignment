@@ -499,7 +499,7 @@ void ApplicationSolar::keyCallback(int key, int action, int mods) {
     uploadView();
     uploadProjection();
   }else if(key == GLFW_KEY_7  && (action == GLFW_PRESS )){
-    std::cout<<"Effect Mode: "<<7<<" [Gay]\n";
+    std::cout<<"Effect Mode: "<<7<<" [Gray]\n";
     m_effect_mode.x = ((int)m_effect_mode.x + 1) % 2;
   }else if(key == GLFW_KEY_8  && (action == GLFW_PRESS )){
     std::cout<<"Effect Mode: "<<8<<" [Mir-X]\n";
