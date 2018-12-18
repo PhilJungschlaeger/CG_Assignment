@@ -56,6 +56,7 @@ class ApplicationSolar : public Application {
   model_object star_object;
   model_object orbit_object;
   model_object skybox_object;
+  model_object quad_object;
 
   // camera transform matrix
   glm::fmat4 m_view_transform;
@@ -66,6 +67,7 @@ class ApplicationSolar : public Application {
   model star_model;
   model orbit_model;
   model skybox_model;
+  model quad_model;
 
 
   std::vector<float> m_stars;
@@ -75,6 +77,9 @@ class ApplicationSolar : public Application {
   std::vector<texture_object> tex_objects;
   texture_object skybox;
   std::vector<texture> skybox_textures;
+  texture_object frame_buffer_object;
+  texture_object frame_buffer_tex_obj;
+  texture_object render_buffer_object;
 };
 
 #endif
